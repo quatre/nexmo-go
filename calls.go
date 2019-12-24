@@ -13,6 +13,10 @@ func (c *CallErrorResponse) Error() string {
 
 // CreateCall starts a voice call, configured using the provided CreateCallRequest.
 func (c *CallService) CreateCall(request CreateCallRequest) (*CreateCallResponse, *http.Response, error) {
+	if (request.Ncco != nil) == (request.AnswerURL != nil) {
+		return nil, nil, fmt.Errorf("either Ncco or AnswerURL must be specified")
+	}
+
 	sling := c.sling.New().Post("").BodyJSON(request)
 
 	callResponse := new(CreateCallResponse)
